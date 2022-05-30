@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Rawati</string>
+    <string name="group_name">C22-PS350</string>
+    <string name="remember">Remember me</string>
+    <string name="forgot_pass">Forgot password?</string>
+    <string name="welcome">Welcome</string>
+    <string name="img_logo">Image Logo</string>
+    <string name="from">From</string>
+    <string name="msg_fill">Please fill the blank field for start the app</string>
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signin">signin</string>
+    <string name="or">or</string>
+    <string name="register">Register</string>
+    <string name="loading">Now Loading</string>
+</resources>
