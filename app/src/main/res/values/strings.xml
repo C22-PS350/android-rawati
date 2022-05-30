@@ -14,4 +14,7 @@
     <string name="or">or</string>
     <string name="register">Register</string>
     <string name="loading">Now Loading</string>
+    <string name="login">Login</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
 </resources>

@@ -12,4 +12,8 @@
     <color name="supergreywhite">#7A7A7A</color>
     <color name="greywhitetrans">#807A7A7A</color>
     <color name="greytrans">#B37A7A7A</color>
+
+    <color name="green">#4ECCA3</color>
+    <color name="lightgreen">#76D7B8</color>
+    <color name="darkgreen">#34B38A</color>
 </resources>
