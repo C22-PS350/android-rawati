@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_lock"
-        android:title="menu 1"
-        app:cnb_iconColor="@color/teal_700"/>
+        android:id="@+id/dashboardFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/dashboard"
+        app:cnb_iconColor="@color/green"/>
 
     <item
-        android:id="@+id/nav_dashboard"
-        android:icon="@drawable/ic_email"
-        android:title="menu 2"
-        app:cnb_iconColor="@color/purple_200"/>
+        android:id="@+id/activityFragment"
+        android:icon="@drawable/ic_checklist"
+        android:title="@string/activity"
+        app:cnb_iconColor="@color/green"/>
 
     <item
-        android:id="@+id/nav_notifications"
+        android:id="@+id/recommendationFragment"
+        android:icon="@drawable/ic_check"
+        android:title="Recommendation"
+        app:cnb_iconColor="@color/green"/>
+
+    <item
+        android:id="@+id/profileFragment"
         android:icon="@drawable/ic_person"
-        android:title="menu 3"
-        app:cnb_iconColor="@color/purple_500"/>
-
-    <item
-        android:id="@+id/nav_about"
-        android:icon="@drawable/ic_lock"
-        android:title="menu 4"
-        app:cnb_iconColor="@color/purple_700"/>
+        android:title="Profile"
+        app:cnb_iconColor="@color/green"/>
 
 </menu>

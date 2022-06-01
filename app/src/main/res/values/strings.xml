@@ -17,4 +17,24 @@
     <string name="login">Login</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+
+    <string name="info">Information</string>
+    <string name="login_failed">Login Failed</string>
+    <string name="login_success">Login Success</string>
+    <string name="logout_failed">Logout Failed</string>
+    <string name="logout_success">Logout Success</string>
+    <string name="next">Continue</string>
+
+    <string name="dashboard">Dashboard</string>
+    <string name="activity">Activity</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="hello">Hello,</string>
+    <string name="user">User</string>
+    <string name="here_s_your_daily_track">Here\'s your daily track</string>
+    <string name="calories_gained">Calories gained</string>
+    <string name="wanna_get_recommendation">Wanna get recommendation?</string>
+    <string name="your_daily_calories_need">Your daily calories need</string>
+    <string name="_0_cal">0 Cal</string>
+    <string name="_2500_cal">2500 Cal</string>
 </resources>
