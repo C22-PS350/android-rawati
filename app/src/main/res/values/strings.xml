@@ -10,11 +10,12 @@
     <string name="name">Nama</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="signin">signin</string>
+    <string name="signin">Sign in</string>
     <string name="or">or</string>
     <string name="register">Register</string>
     <string name="loading">Now Loading</string>
     <string name="login">Login</string>
     <string name="no_account">Don\'t have an account?</string>
+    <string name="have_account">Already have an account?</string>
     <string name="sign_in_with_google">Sign in with Google</string>
 </resources>
