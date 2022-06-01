@@ -15,7 +15,7 @@ import com.bangkit.rawati.databinding.ActivitySplashScreenBinding
 import com.bangkit.rawati.ui.main.MainActivity
 import com.bangkit.rawati.ui.main.MainViewModel
 import com.bangkit.rawati.ui.main.ViewModelFactory
-import com.bangkit.rawati.ui.register.RegisterActivity
+import com.bangkit.rawati.ui.signin.SignInActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 class SplashScreen : AppCompatActivity() {
@@ -43,7 +43,7 @@ class SplashScreen : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                startActivity(Intent(this, RegisterActivity::class.java))
+                startActivity(Intent(this, SignInActivity::class.java))
                 finish()
             }
         }
