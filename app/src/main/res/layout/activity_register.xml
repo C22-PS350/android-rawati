@@ -6,27 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.register.RegisterActivity">
 
-    <TextView
-        android:id="@+id/txt_welcome"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/img_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/img_logo"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        tools:src="@tools:sample/avatars"
-        android:contentDescription="@string/img_logo"
         app:layout_constraintBottom_toTopOf="@+id/line_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
 
     <TextView
         android:id="@+id/txt_msg"
@@ -104,15 +92,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_signup"
+        android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/register"
-        android:enabled="false"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <RelativeLayout
         android:id="@+id/rl_or"
@@ -122,17 +109,17 @@
         android:padding="14dp"
         app:layout_constraintEnd_toEndOf="@id/line_vertical2"
         app:layout_constraintStart_toStartOf="@id/line_vertical"
-        app:layout_constraintTop_toBottomOf="@+id/btn_signup">
+        app:layout_constraintTop_toBottomOf="@+id/btn_register">
 
         <TextView
             android:id="@+id/txt_or"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="@string/or"/>
+            android:text="@string/or"
+            android:textSize="14sp" />
 
         <View
             android:layout_width="match_parent"
@@ -140,8 +127,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:layout_toStartOf="@id/txt_or"
-            android:background="@color/grey"
-            />
+            android:background="@color/grey" />
 
         <View
             android:layout_width="match_parent"
@@ -149,19 +135,36 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/txt_or"
-            android:background="@color/grey"
-            />
+            android:background="@color/grey" />
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_signin"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/rl_signin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/signin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rl_or" />
+        android:gravity="center"
+        android:padding="14dp"
+        app:layout_constraintEnd_toEndOf="@id/line_vertical2"
+        app:layout_constraintStart_toStartOf="@id/line_vertical"
+        app:layout_constraintTop_toBottomOf="@+id/rl_or">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="@string/have_account"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txt_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signin"
+            android:textColor="@color/darkgreen" />
+
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/line_horizontal"
@@ -220,5 +223,4 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </FrameLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
