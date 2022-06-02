@@ -38,4 +38,17 @@
     <string name="your_daily_calories_need">Your daily calories need</string>
     <string name="_0_cal">0 Cal</string>
     <string name="_2500_cal">2500 Cal</string>
+    <string name="foods_you_ate_today">Foods you ate today</string>
+    <string name="exercises_you_did_today">Exercises you did today</string>
+    <string name="target_bmi">Target BMI</string>
+    <string name="target_weight">Target weight</string>
+    <string name="current_weight">Current weight</string>
+    <string name="current_bmi">Current BMI</string>
+    <string name="see_bmi_categories">See BMI categories</string>
+    <string name="our_today_recommendation">Our today recommendation</string>
+    <string name="keep_up_your_good_work">Keep up your good work!</string>
+    <string name="wanna_see_tips">Wanna see tips?</string>
+    <string name="see_why">See why?</string>
+    <string name="see_how">See how?</string>
+    <string name="my_profile">My Profile</string>
 </resources>

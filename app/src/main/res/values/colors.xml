@@ -17,4 +17,6 @@
     <color name="lightgreen">#76D7B8</color>
     <color name="darkgreen">#34B38A</color>
     <color name="orange">#E85618</color>
+    <color name="red">#D90000</color>
+
 </resources>
