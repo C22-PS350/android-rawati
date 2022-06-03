@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
@@ -14,6 +15,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
+import com.bangkit.rawati.data.remote.response.LoginResponse
 import com.bangkit.rawati.databinding.ActivitySignInBinding
 import com.bangkit.rawati.helper.ApiCallbackString
 import com.bangkit.rawati.ui.main.MainActivity
@@ -90,15 +92,26 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signin(){
         binding.apply {
-            val email = txtEmail.text.toString()
-            val pass = txtPassword.text.toString()
+            val loginResponse = LoginResponse(
+                identifier = txtEmail.text.toString(),
+                password = txtPassword.text.toString(),
+                loginResult = null
+            )
+
             load(true)
 
-            viewModel.signin(email, pass, object : ApiCallbackString {
+            viewModel.signin(loginResponse, object : ApiCallbackString{
                 override fun onResponse(state: Boolean, message: String) {
                     process(state, message)
                 }
-            })
+            }) {
+                if (it?.loginResult != null) {
+                    it.identifier
+                    it.password
+                } else {
+                    Toast.makeText(applicationContext, "GAGAL MASUK", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

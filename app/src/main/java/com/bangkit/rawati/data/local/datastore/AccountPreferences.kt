@@ -12,10 +12,6 @@ class AccountPreferences private constructor(private val dataStore: DataStore<Pr
     fun getUser(): Flow<Account> {
         return dataStore.data.map {
             Account(
-                it[NAME] ?: "",
-                it[EMAIL] ?: "",
-                it[PASSWORD] ?: "",
-                it[USERID] ?: "",
                 it[TOKEN] ?: "",
                 it[STATE] ?: false
             )
@@ -24,10 +20,6 @@ class AccountPreferences private constructor(private val dataStore: DataStore<Pr
 
     suspend fun saveUser(user: Account) {
         dataStore.edit {
-            it[NAME] = user.name
-            it[EMAIL] = user.email
-            it[PASSWORD] = user.password
-            it[USERID] = user.userId
             it[TOKEN] = user.token
             it[STATE] = user.isLogin
         }
@@ -57,10 +49,6 @@ class AccountPreferences private constructor(private val dataStore: DataStore<Pr
         @Volatile
         private var INSTANCE: AccountPreferences? = null
 
-        private val NAME = stringPreferencesKey("name")
-        private val EMAIL = stringPreferencesKey("email")
-        private val PASSWORD = stringPreferencesKey("password")
-        private val USERID = stringPreferencesKey("userId")
         private val TOKEN = stringPreferencesKey("token")
         private val STATE = booleanPreferencesKey("state")
 

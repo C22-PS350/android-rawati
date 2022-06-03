@@ -21,41 +21,34 @@ import retrofit2.Response
 
 class SignInViewModel (private val pref: AccountPreferences): ViewModel() {
 
-    fun signin(email: String, pass: String, param: ApiCallbackString){
+    fun signin(loginResponse: LoginResponse, param: ApiCallbackString, onResult: (LoginResponse?) -> Unit){
         ApiConfig.apiInstance
-            .login(email, pass)
-            .enqueue(object : Callback<LoginResponse> {
+            .login(loginResponse)
+            .enqueue(object : Callback<LoginResponse>{
                 override fun onResponse(
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
-                    if (response.isSuccessful){
-                        val responseBody = response.body()
-                        if (responseBody != null && !responseBody.error){
-                            param.onResponse(response.body() != null, SUCCESS)
-                            val user = Account(
-                                responseBody.loginResult.name,
-                                email,
-                                pass,
-                                responseBody.loginResult.userId,
-                                responseBody.loginResult.token,
-                                true
-                            )
-                            saveAccount(user)
-                        }
+                    val responseBody = response.body()
+                    onResult(responseBody)
+                    if (responseBody != null){
+                        param.onResponse(response.body() != null, SUCCESS)
+                        val user = Account(
+                            responseBody.loginResult!!.token,
+                            true
+                        )
+                        saveAccount(user)
                     } else {
-                        Log.e(TAG, "onFailure: ${response.message()}")
+                        Log.e(TAG, "onFailure: ${response.code()}")
                         val jsonObject = JSONTokener(response.errorBody()!!.string()).nextValue() as JSONObject
-                        val message = jsonObject.getString("message")
+                        val message = jsonObject.getString("error")
                         param.onResponse(false, message)
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.d(TAG, "onFailure: ${t.message}")
-                    param.onResponse(false, t.message.toString())
+                    onResult(null)
                 }
-
             })
     }
 
