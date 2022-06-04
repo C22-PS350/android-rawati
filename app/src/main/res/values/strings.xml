@@ -51,4 +51,11 @@
     <string name="see_why">See why?</string>
     <string name="see_how">See how?</string>
     <string name="my_profile">My Profile</string>
+    <string name="notification">Notification</string>
+    <string name="change_theme">Change Theme</string>
+    <string name="change_password">Change Password</string>
+    <string name="signout">Signout</string>
+    <string name="best_practice_for_you">Best practice for you</string>
+    <string name="ideal_weight">Ideal Weight</string>
+    <string name="food_ideas">Food Ideas</string>
 </resources>

@@ -20,4 +20,10 @@ interface ApiService {
     fun login(
         @Body loginResponse: LoginResponse
     ): Call<LoginResponse>
+
+    /*@Headers("Content-Type: application/json")
+    @PUT("auth/forgot-password")
+    fun forgotPassword(
+        @Body apiResponse: ApiResponse
+    ): Call<ApiResponse>*/
 }
