@@ -2,18 +2,17 @@ package com.bangkit.rawati.data.remote.api
 
 import com.bangkit.rawati.data.remote.response.ApiResponse
 import com.bangkit.rawati.data.remote.response.LoginResponse
+import com.bangkit.rawati.data.remote.response.RegisterResponse
 import retrofit2.Call
 import retrofit2.http.*
 
 
 interface ApiService {
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
     @POST("auth/register")
     fun register(
-        @Field("name") name: String,
-        @Field("email") email: String,
-        @Field("password") pass: String
-    ): Call<ApiResponse>
+        @Body registerResponse: RegisterResponse
+    ): Call<RegisterResponse>
 
     @Headers("Content-Type: application/json")
     @POST("auth/login")
