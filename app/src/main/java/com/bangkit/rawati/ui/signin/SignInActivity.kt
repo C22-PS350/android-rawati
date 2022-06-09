@@ -1,12 +1,12 @@
 package com.bangkit.rawati.ui.signin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.widget.CompoundButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
@@ -16,14 +16,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.response.LoginResponse
+import com.bangkit.rawati.data.remote.response.ResetPassword
 import com.bangkit.rawati.databinding.ActivitySignInBinding
 import com.bangkit.rawati.helper.ApiCallbackString
 import com.bangkit.rawati.ui.main.MainActivity
 import com.bangkit.rawati.ui.main.ViewModelFactory
 import com.bangkit.rawati.ui.register.RegisterActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
+
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var viewModel: SignInViewModel
@@ -47,8 +51,12 @@ class SignInActivity : AppCompatActivity() {
                 signin()
             }
 
+            txtForgot.setOnClickListener {
+                popupForgotPassword()
+            }
+
             viewModel.getRemember()
-                .observe(this@SignInActivity) {isRememberActive: Boolean ->
+                .observe(this@SignInActivity) { isRememberActive: Boolean ->
                     if (isRememberActive) {
                         rbRemember.isChecked = true
                         rememberMe()
@@ -65,7 +73,70 @@ class SignInActivity : AppCompatActivity() {
         updateViews()
     }
 
-    private fun rememberMe(){
+    @SuppressLint("InflateParams")
+    private fun popupForgotPassword() {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.popup_forgot_password, null)
+        val submit = view.findViewById<Button>(R.id.btn_resetpass)
+        val txtemail = view.findViewById<TextInputEditText>(R.id.txt_email_reset)
+        val loadreset = view.findViewById<ProgressBar>(R.id.progress_reset)
+
+        submit.setOnClickListener {
+            val resetPassword = ResetPassword(
+                email = txtemail.text.toString()
+            )
+            viewModel.resetPassword(resetPassword, object : ApiCallbackString {
+                override fun onResponse(state: Boolean, message: String) {
+                    processReset(state, message)
+                }
+            }) {
+                it?.email
+            }
+            loadreset.visibility = View.VISIBLE
+            /*processReset(true, "Success")
+            dialog.dismiss()*/
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    @SuppressLint("InflateParams", "SetTextI18n")
+    private fun processReset(state: Boolean, message: String) {
+        if (state) {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
+            val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
+
+            closebtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+        } else {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
+            val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
+            val imgicon = view.findViewById<ImageView>(R.id.img_icon)
+            val textinfo = view.findViewById<TextView>(R.id.txt_info)
+            val textmessage = view.findViewById<TextView>(R.id.txt_message)
+
+            imgicon.setImageResource(R.drawable.ic_error)
+            textinfo.text = getString(R.string.reset_failed)
+            textmessage.text = "${getString(R.string.error_msg)} ${message}"
+
+            closebtn.setOnClickListener {
+                startActivity(Intent(this, SignInActivity::class.java))
+                finish()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+        }
+    }
+
+    private fun rememberMe() {
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
@@ -73,7 +144,7 @@ class SignInActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun forgetMe(){
+    private fun forgetMe() {
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
@@ -90,7 +161,7 @@ class SignInActivity : AppCompatActivity() {
         binding.txtEmail.setText(email)
     }
 
-    private fun signin(){
+    private fun signin() {
         binding.apply {
             val loginResponse = LoginResponse(
                 identifier = txtEmail.text.toString(),
@@ -100,7 +171,7 @@ class SignInActivity : AppCompatActivity() {
 
             load(true)
 
-            viewModel.signin(loginResponse, object : ApiCallbackString{
+            viewModel.signin(loginResponse, object : ApiCallbackString {
                 override fun onResponse(state: Boolean, message: String) {
                     process(state, message)
                 }
@@ -115,13 +186,16 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun load(state: Boolean){
-        if (state){
+    private fun load(state: Boolean) {
+        if (state) {
             binding.progress.visibility = View.VISIBLE
             binding.btnSignin.visibility = View.GONE
             binding.btnSigningoogle.visibility = View.GONE
-            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        }else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+        } else {
             binding.progress.visibility = View.GONE
             binding.btnSignin.visibility = View.VISIBLE
             binding.btnSigningoogle.visibility = View.VISIBLE
@@ -131,20 +205,13 @@ class SignInActivity : AppCompatActivity() {
 
     private fun process(state: Boolean, message: String) {
         if (state) {
-            AlertDialog.Builder(this).apply {
-                setTitle(getString(R.string.info))
-                setMessage(getString(R.string.login_success))
-                setPositiveButton(getString(R.string.next)) { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                }
-                load(false)
-                setCancelable(false)
-                create()
-                show()
-            }
+            Toast.makeText(applicationContext, "Welcome ${binding.txtEmail.text.toString()}", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+            load(false)
         } else {
             AlertDialog.Builder(this).apply {
                 setTitle(getString(R.string.info))

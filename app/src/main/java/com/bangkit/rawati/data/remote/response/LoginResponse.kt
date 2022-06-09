@@ -13,3 +13,8 @@ data class LoginResponse(
     @field:SerializedName("data")
     val loginResult: LoginResult?
 )
+
+data class ResetPassword(
+    @field:SerializedName("email")
+    val email: String
+)

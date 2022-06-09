@@ -59,4 +59,12 @@
     <string name="best_practice_for_you">Best practice for you</string>
     <string name="ideal_weight">Ideal Weight</string>
     <string name="food_ideas">Food Ideas</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="txt_reset_password">Enter the email associated with your account and we\'ll send an email with intruction to reset your password</string>
+    <string name="check_your_mail">Check your mail</string>
+    <string name="resetpass_success">We have sent a password recover instruction to your email</string>
+    <string name="close">Close</string>
+    <string name="reset_failed">Reset password failed</string>
+    <string name="error_msg">Error message</string>
 </resources>

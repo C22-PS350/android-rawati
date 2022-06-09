@@ -27,7 +27,8 @@ class AccountPreferences private constructor(private val dataStore: DataStore<Pr
 
     suspend fun signout() {
         dataStore.edit {
-            it.clear()
+            it[TOKEN] = ""
+            it[STATE] = false
         }
     }
 

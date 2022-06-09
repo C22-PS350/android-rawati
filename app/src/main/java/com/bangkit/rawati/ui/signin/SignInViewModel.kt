@@ -9,6 +9,7 @@ import com.bangkit.rawati.data.local.datastore.Account
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.api.ApiConfig
 import com.bangkit.rawati.data.remote.response.LoginResponse
+import com.bangkit.rawati.data.remote.response.ResetPassword
 import com.bangkit.rawati.helper.ApiCallbackString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +48,32 @@ class SignInViewModel (private val pref: AccountPreferences): ViewModel() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    onResult(null)
+                }
+            })
+    }
+
+    fun resetPassword(resetPassword: ResetPassword, param: ApiCallbackString, onResult: (ResetPassword?) -> Unit){
+        ApiConfig.apiInstance
+            .resetPassword(resetPassword)
+            .enqueue(object : Callback<ResetPassword>{
+                override fun onResponse(
+                    call: Call<ResetPassword>,
+                    response: Response<ResetPassword>
+                ) {
+                    val responseBody = response.body()
+                    onResult(responseBody)
+                    if (responseBody != null){
+                        param.onResponse(response.body() != null, SUCCESS)
+                    } else {
+                        Log.e(TAG, "onFailure: ${response.code()}")
+                        val jsonObject = JSONTokener(response.errorBody()!!.string()).nextValue() as JSONObject
+                        val message = jsonObject.getString("error")
+                        param.onResponse(false, message)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResetPassword>, t: Throwable) {
                     onResult(null)
                 }
             })
