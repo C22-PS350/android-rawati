@@ -51,7 +51,6 @@ interface ApiService {
     @GET("users/{user_id}/profile")
     fun getProfile(
         @Header("Authorization") token: String,
-        @Path("user_id") user_id: String,
-        @Body userProfileResponse: UserProfileResponse
+        @Path("user_id") user_id: String
     ): Call<UserProfileResponse>
 }

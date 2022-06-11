@@ -74,4 +74,6 @@
     <string name="msg_input_data">Welcome to rawati mobile app, to use the app please input the data first.</string>
     <string name="default_date" tools:ignore="TypographyDashes">2000-01-01</string>
     <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="woman">Woman</string>
 </resources>
