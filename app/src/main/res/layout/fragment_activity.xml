@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:backgroundTint="@color/white"
-        android:contentDescription="next_day"
+        android:contentDescription="@string/next_day"
         app:icon="@drawable/ic_next"
         app:iconGravity="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:backgroundTint="@color/white"
-        android:contentDescription="previous_day"
-        app:icon="@drawable/ic_next"
+        android:contentDescription="@string/prev_day"
+        app:icon="@drawable/ic_prev"
         app:iconGravity="textStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="99"
         android:backgroundTint="@color/white"
-        android:text="Today"
+        android:text="@string/date"
         android:textColor="@color/green"
         app:layout_constraintEnd_toStartOf="@+id/btn_next"
         app:layout_constraintStart_toEndOf="@+id/btn_prev"
@@ -60,17 +60,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="@string/_2500_cal"
+        android:text="@string/food_calories"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_act_calories" />
 
     <TextView
-        android:id="@+id/food"
+        android:id="@+id/txt_food_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="Food"
+        android:text="@string/food"
         app:layout_constraintEnd_toStartOf="@+id/minus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/food_calories" />
@@ -81,28 +81,28 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/_0_cal"
+        android:text="@string/exercise_calories"
         app:layout_constraintStart_toEndOf="@+id/minus"
         app:layout_constraintTop_toBottomOf="@+id/txt_act_calories" />
 
     <TextView
         android:id="@+id/minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="2dp"
+        android:layout_height="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="-"
+        android:text="@string/minus"
         app:layout_constraintStart_toEndOf="@+id/food_calories"
         app:layout_constraintTop_toBottomOf="@+id/txt_act_calories" />
 
     <TextView
-        android:id="@+id/exercise"
+        android:id="@+id/txt_exercise_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="Exercise"
+        android:text="@string/exercise"
         app:layout_constraintEnd_toStartOf="@+id/equal"
         app:layout_constraintStart_toEndOf="@+id/minus"
         app:layout_constraintTop_toBottomOf="@+id/exercise_calories" />
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="="
+        android:text="@string/equal"
         app:layout_constraintStart_toEndOf="@+id/exercise_calories"
         app:layout_constraintTop_toBottomOf="@+id/txt_act_calories" />
 
@@ -123,44 +123,34 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/_2500_cal"
+        android:text="@string/net_calories"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/equal"
         app:layout_constraintTop_toBottomOf="@+id/txt_act_calories" />
 
     <TextView
-        android:id="@+id/act_calories"
+        android:id="@+id/txt_calories_act"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Calories"
+        android:text="@string/calories"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/equal"
         app:layout_constraintTop_toBottomOf="@+id/net_calories" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/txt_food_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Food"
+        android:text="@string/food"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/food" />
-
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/_2500_cal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/act_calories" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_food_1" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rv_food_list"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -169,31 +159,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21">
+        app:layout_constraintTop_toBottomOf="@+id/txt_food_2">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/textView24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/_0_cal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-
-    <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/txt_exercise_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Exercise"
+        android:text="@string/exercise"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/rv_food_list" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_exercise_list"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -202,6 +183,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_exercise_2" />
+
+    <Button
+        android:id="@+id/btn_add_food"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/add_food"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_calories_act" />
+
+    <Button
+        android:id="@+id/btn_add_exercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/add_exercise"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_food_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
