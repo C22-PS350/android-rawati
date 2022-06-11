@@ -32,6 +32,7 @@ class AccountPreferences private constructor(private val dataStore: DataStore<Pr
             it[USER_ID] = ""
             it[TOKEN] = ""
             it[STATE] = false
+            it[THEME_KEY] = false
         }
     }
 

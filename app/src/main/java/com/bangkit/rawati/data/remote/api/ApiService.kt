@@ -38,4 +38,20 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("user_id") user_id: String
     ): Call<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @PUT("users/{user_id}/profile")
+    fun updateProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_id: String,
+        @Body userProfileResponse: UserProfileResponse
+    ): Call<UserProfileResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("users/{user_id}/profile")
+    fun getProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_id: String,
+        @Body userProfileResponse: UserProfileResponse
+    ): Call<UserProfileResponse>
 }

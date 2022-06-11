@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -32,12 +33,21 @@ class SplashScreen : AppCompatActivity() {
             statusLogin()
             finish()
         }, time.toLong())
-    }
 
-    private fun statusLogin(){
         val pref = AccountPreferences.getInstance(dataStore)
         viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
 
+        viewModel.getThemeSettings().observe(this,{
+                isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        })
+    }
+
+    private fun statusLogin(){
         viewModel.getUser().observe(this) {
             if (it.isLogin) {
                 startActivity(Intent(this, MainActivity::class.java))

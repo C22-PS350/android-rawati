@@ -27,7 +27,6 @@ import com.google.android.material.textfield.TextInputEditText
 
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
-
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var viewModel: SignInViewModel
@@ -179,17 +178,7 @@ class SignInActivity : AppCompatActivity() {
                     it.identifier
                     it.password
                 } else {
-                    AlertDialog.Builder(this@SignInActivity).apply {
-                        setTitle(getString(R.string.info))
-                        setMessage("${getString(R.string.login_failed)}")
-                        setPositiveButton(getString(R.string.next)) { _, _ ->
-                            binding.progress.visibility = View.GONE
-                        }
-                        load(false)
-                        setCancelable(false)
-                        create()
-                        show()
-                    }
+                    Toast.makeText(applicationContext, "error", Toast.LENGTH_SHORT).show()
                 }
             }
         }
