@@ -1,13 +1,8 @@
 package com.bangkit.rawati.data.remote.api
 
-import com.bangkit.rawati.data.remote.response.LoginResponse
-import com.bangkit.rawati.data.remote.response.RegisterResponse
-import com.bangkit.rawati.data.remote.response.ResetPassword
+import com.bangkit.rawati.data.remote.response.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 
 interface ApiService {
@@ -28,4 +23,19 @@ interface ApiService {
     fun resetPassword(
         @Body resetPassword: ResetPassword
     ): Call<ResetPassword>
+
+    @Headers("Content-Type: application/json")
+    @PUT("users/{user_id}/update-password")
+    fun changePassword(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_id: String,
+        @Body changePassword: ChangePassword
+    ): Call<ChangePassword>
+
+    @Headers("Content-Type: application/json")
+    @GET("users/{user_id}")
+    fun getDataUser(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_id: String
+    ): Call<UserResponse>
 }

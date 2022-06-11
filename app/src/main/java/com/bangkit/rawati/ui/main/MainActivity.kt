@@ -1,12 +1,7 @@
 package com.bangkit.rawati.ui.main
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -20,7 +15,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.databinding.ActivityMainBinding
-import com.bangkit.rawati.ui.signin.SignInActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ismaeldivita.chipnavigation.ChipNavigationBar
 
@@ -51,35 +45,5 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.menu_logout -> {
-                mainViewModel.signout()
-                AlertDialog.Builder(this).apply {
-                    setTitle(getString(R.string.info))
-                    setMessage(getString(R.string.logout_success))
-                    setPositiveButton(getString(R.string.next)) { _, _ ->
-                        startActivity(Intent(this@MainActivity, SignInActivity::class.java))
-                        finish()
-                    }
-                    create()
-                    setCancelable(false)
-                    show()
-                }
-            }
-
-            R.id.menu_settings -> {
-                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
-            }
-
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

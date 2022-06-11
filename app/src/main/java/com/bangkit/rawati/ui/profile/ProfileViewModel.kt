@@ -1,14 +1,15 @@
-package com.bangkit.rawati.ui.register
+package com.bangkit.rawati.ui.profile
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.bangkit.rawati.data.local.datastore.Account
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.api.ApiConfig
-import com.bangkit.rawati.data.remote.response.RegisterResponse
+import com.bangkit.rawati.data.remote.response.ChangePassword
 import com.bangkit.rawati.helper.ApiCallbackString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -16,26 +17,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterViewModel (private val pref: AccountPreferences): ViewModel() {
+class ProfileViewModel (private val pref: AccountPreferences): ViewModel(){
 
-    fun register(registerResponse: RegisterResponse, param: ApiCallbackString, onResult: (RegisterResponse?) -> Unit){
+    fun changePassword(token: String, user_id: String, changePassword: ChangePassword, param: ApiCallbackString, onResult: (ChangePassword?) -> Unit){
         ApiConfig.apiInstance
-            .register(registerResponse)
-            .enqueue(object : Callback<RegisterResponse>{
+            .changePassword("Bearer $token", user_id, changePassword)
+            .enqueue(object : Callback<ChangePassword> {
                 override fun onResponse(
-                    call: Call<RegisterResponse>,
-                    response: Response<RegisterResponse>
+                    call: Call<ChangePassword>,
+                    response: Response<ChangePassword>
                 ) {
                     val responseBody = response.body()
                     onResult(responseBody)
                     if (responseBody != null){
                         param.onResponse(response.body() != null, SUCCESS)
-                        val user = Account(
-                            responseBody.registerResult!!.user_id,
-                            responseBody.registerResult.token,
-                            true
-                        )
-                        saveAccount(user)
                     } else {
                         Log.e(TAG, "onFailure: ${response.code()}")
                         val jsonObject = JSONTokener(response.errorBody()!!.string()).nextValue() as JSONObject
@@ -44,20 +39,34 @@ class RegisterViewModel (private val pref: AccountPreferences): ViewModel() {
                     }
                 }
 
-                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                override fun onFailure(call: Call<ChangePassword>, t: Throwable) {
                     onResult(null)
                 }
             })
     }
 
-    fun saveAccount(user: Account){
-        CoroutineScope(Dispatchers.IO).launch {
-            pref.saveUser(user)
+    fun getUser(): LiveData<Account> {
+        return pref.getUser().asLiveData()
+    }
+
+    fun signout() {
+        viewModelScope.launch {
+            pref.signout()
+        }
+    }
+
+    fun getThemeSettings(): LiveData<Boolean> {
+        return pref.getThemeSetting().asLiveData()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        viewModelScope.launch {
+            pref.saveThemeSetting(isDarkModeActive)
         }
     }
 
     companion object {
-        const val TAG = "RegisterViewModel"
+        const val TAG = "ProfileViewModel"
         const val SUCCESS = "success"
     }
 }

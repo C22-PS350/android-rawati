@@ -53,7 +53,7 @@
     <string name="see_how">See how?</string>
     <string name="my_profile">My Profile</string>
     <string name="notification">Notification</string>
-    <string name="change_theme">Change Theme</string>
+    <string name="change_theme">Night Mode</string>
     <string name="change_password">Change Password</string>
     <string name="signout">Signout</string>
     <string name="best_practice_for_you">Best practice for you</string>
@@ -67,4 +67,8 @@
     <string name="close">Close</string>
     <string name="reset_failed">Reset password failed</string>
     <string name="error_msg">Error message</string>
+    <string name="my_goals">My Goals</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="submit">Submit</string>
 </resources>

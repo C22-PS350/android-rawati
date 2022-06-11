@@ -3,6 +3,9 @@ package com.bangkit.rawati.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
+import com.bangkit.rawati.ui.dashboard.DashboardViewModel
+import com.bangkit.rawati.ui.profile.DetailProfileViewModel
+import com.bangkit.rawati.ui.profile.ProfileViewModel
 import com.bangkit.rawati.ui.register.RegisterViewModel
 import com.bangkit.rawati.ui.signin.SignInViewModel
 
@@ -18,6 +21,15 @@ class ViewModelFactory (private val pref: AccountPreferences) : ViewModelProvide
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(pref) as T
+            }
+            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> {
+                DashboardViewModel(pref) as T
+            }
+            modelClass.isAssignableFrom(DetailProfileViewModel::class.java) -> {
+                DetailProfileViewModel(pref) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(pref) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

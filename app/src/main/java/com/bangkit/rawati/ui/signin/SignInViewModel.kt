@@ -35,7 +35,8 @@ class SignInViewModel (private val pref: AccountPreferences): ViewModel() {
                     if (responseBody != null){
                         param.onResponse(response.body() != null, SUCCESS)
                         val user = Account(
-                            responseBody.loginResult!!.token,
+                            responseBody.loginResult!!.user_id,
+                            responseBody.loginResult.token,
                             true
                         )
                         saveAccount(user)

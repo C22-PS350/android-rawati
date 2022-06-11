@@ -1,69 +1,176 @@
 package com.bangkit.rawati.ui.profile
 
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.bangkit.rawati.R
+import com.bangkit.rawati.data.local.datastore.AccountPreferences
+import com.bangkit.rawati.data.remote.response.ChangePassword
 import com.bangkit.rawati.databinding.FragmentProfileBinding
+import com.bangkit.rawati.helper.ApiCallbackString
+import com.bangkit.rawati.ui.main.MainActivity
+import com.bangkit.rawati.ui.main.ViewModelFactory
+import com.bangkit.rawati.ui.signin.SignInActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var binding: FragmentProfileBinding
+    private var viewModel: ProfileViewModel? = null
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    @SuppressLint("InflateParams")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
 
-        binding.llProfile.setOnClickListener {
-            val intent = Intent (activity, DetailProfileActivity::class.java)
-            activity?.startActivity(intent)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        val pref = AccountPreferences.getInstance(requireContext().dataStore)
+        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[ProfileViewModel::class.java]
+
+        binding.apply {
+            llSignout.setOnClickListener {
+                val dialog = Dialog(requireActivity())
+                val view = layoutInflater.inflate(R.layout.popup_confirm_layout, null)
+                val btnyes = view.findViewById<Button>(R.id.btn_yes)
+                val btnNo = view.findViewById<Button>(R.id.btn_no)
+                val info = view.findViewById<TextView>(R.id.info_confirm)
+                val msg = view.findViewById<TextView>(R.id.msg_confirm)
+
+                info.text = "Logout"
+                msg.text = "Are you sure want to logout?"
+                btnyes.text = "YES"
+                btnyes.setOnClickListener {
+                    viewModel!!.signout()
+                    startActivity(Intent(requireActivity(), SignInActivity::class.java))
+                    requireActivity().finish()
+                }
+
+                btnNo.text = "NO"
+                btnNo.setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                dialog.setCancelable(false)
+                dialog.setContentView(view)
+                dialog.show()
+            }
+
+            llPassword.setOnClickListener {
+                val dialog = BottomSheetDialog(requireContext())
+                val view = layoutInflater.inflate(R.layout.popup_change_password, null)
+                val btnsubmit = view.findViewById<Button>(R.id.btn_submit)
+                val txt_oldpass = view.findViewById<TextInputEditText>(R.id.txt_old_password)
+                val txt_newpass = view.findViewById<TextInputEditText>(R.id.txt_new_password)
+
+                btnsubmit.setOnClickListener {
+                    val changePassword = ChangePassword(
+                        new_password = txt_newpass.text.toString(),
+                        old_password = txt_oldpass.text.toString()
+                    )
+
+                    viewModel!!.getUser().observe(requireActivity()) {
+                        viewModel!!.changePassword(
+                            it.token,
+                            it.user_id,
+                            changePassword,
+                            object : ApiCallbackString{
+                                override fun onResponse(state: Boolean, message: String) {
+                                    processChange(state, message)
+                                }
+                            }) {
+                            it?.new_password
+                            it?.old_password
+                        }
+                    }
+                }
+                dialog.setContentView(view)
+                dialog.show()
+            }
+
+            llProfile.setOnClickListener {
+                startActivity(Intent(context, DetailProfileActivity::class.java))
+            }
+
+            viewModel!!.getThemeSettings()
+                .observe(requireActivity()) { isDarkModeActive: Boolean ->
+                    if (isDarkModeActive) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        switchTheme.isChecked = true
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        switchTheme.isChecked = false
+                    }
+                }
+
+            switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+                viewModel!!.saveThemeSetting(isChecked)
+            }
         }
 
         return binding.root
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    }
+    @SuppressLint("InflateParams", "SetTextI18n")
+    private fun processChange(state: Boolean, message: String) {
+        if (state) {
+            val dialog = BottomSheetDialog(requireContext())
+            val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
+            val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
+            val imgicon = view.findViewById<ImageView>(R.id.img_icon)
+            val textinfo = view.findViewById<TextView>(R.id.txt_info)
+            val textmessage = view.findViewById<TextView>(R.id.txt_message)
+
+            imgicon.setImageResource(R.drawable.ic_check)
+            textinfo.text = "Change password success"
+            textmessage.text = "Your password has been change, please login again"
+
+            closebtn.setOnClickListener {
+                startActivity(Intent(requireActivity(), SignInActivity::class.java))
+                viewModel!!.signout()
+                requireActivity().finish()
             }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+        } else {
+            val dialog = BottomSheetDialog(requireContext())
+            val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
+            val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
+            val imgicon = view.findViewById<ImageView>(R.id.img_icon)
+            val textinfo = view.findViewById<TextView>(R.id.txt_info)
+            val textmessage = view.findViewById<TextView>(R.id.txt_message)
+
+            imgicon.setImageResource(R.drawable.ic_error)
+            textinfo.text = getString(R.string.reset_failed)
+            textmessage.text = "${getString(R.string.error_msg)} ${message}"
+
+            closebtn.setOnClickListener {
+                startActivity(Intent(requireActivity(), MainActivity::class.java))
+                requireActivity().finish()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+        }
     }
 }

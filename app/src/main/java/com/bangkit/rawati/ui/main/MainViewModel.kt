@@ -18,4 +18,14 @@ class MainViewModel(private val pref: AccountPreferences): ViewModel() {
             pref.signout()
         }
     }
+
+    fun getThemeSettings(): LiveData<Boolean> {
+        return pref.getThemeSetting().asLiveData()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        viewModelScope.launch {
+            pref.saveThemeSetting(isDarkModeActive)
+        }
+    }
 }

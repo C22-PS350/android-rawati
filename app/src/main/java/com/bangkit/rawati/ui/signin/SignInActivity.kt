@@ -93,8 +93,6 @@ class SignInActivity : AppCompatActivity() {
                 it?.email
             }
             loadreset.visibility = View.VISIBLE
-            /*processReset(true, "Success")
-            dialog.dismiss()*/
         }
 
         dialog.setContentView(view)
@@ -109,7 +107,8 @@ class SignInActivity : AppCompatActivity() {
             val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
 
             closebtn.setOnClickListener {
-                dialog.dismiss()
+                startActivity(Intent(this, SignInActivity::class.java))
+                finish()
             }
             dialog.setCancelable(false)
             dialog.setContentView(view)
@@ -180,7 +179,17 @@ class SignInActivity : AppCompatActivity() {
                     it.identifier
                     it.password
                 } else {
-                    Toast.makeText(applicationContext, "GAGAL MASUK", Toast.LENGTH_SHORT).show()
+                    AlertDialog.Builder(this@SignInActivity).apply {
+                        setTitle(getString(R.string.info))
+                        setMessage("${getString(R.string.login_failed)}")
+                        setPositiveButton(getString(R.string.next)) { _, _ ->
+                            binding.progress.visibility = View.GONE
+                        }
+                        load(false)
+                        setCancelable(false)
+                        create()
+                        show()
+                    }
                 }
             }
         }

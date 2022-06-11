@@ -13,7 +13,8 @@
         android:theme="@style/Theme.Rawati">
         <activity
             android:name=".ui.profile.DetailProfileActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Rawati_NoActionBar"/>
         <activity
             android:name=".ui.register.RegisterActivity"
             android:exported="false"
