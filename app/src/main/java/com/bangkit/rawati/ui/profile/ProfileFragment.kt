@@ -30,7 +30,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
-
 class ProfileFragment : Fragment() {
     private var viewModel: ProfileViewModel? = null
     private var _binding: FragmentProfileBinding? = null
@@ -48,6 +47,10 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProvider(this, ViewModelFactory(pref))[ProfileViewModel::class.java]
 
         binding.apply {
+            /*llNotification.setOnClickListener {
+                startActivity(Intent(requireActivity(), UpdateProfileActivity::class.java))
+            }*/
+
             llSignout.setOnClickListener {
                 val dialog = Dialog(requireActivity())
                 val view = layoutInflater.inflate(R.layout.popup_confirm_layout, null)
@@ -111,16 +114,16 @@ class ProfileFragment : Fragment() {
                 startActivity(Intent(context, DetailProfileActivity::class.java))
             }
 
-            viewModel!!.getThemeSettings()
-                .observe(requireActivity()) { isDarkModeActive: Boolean ->
-                    if (isDarkModeActive) {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        switchTheme.isChecked = true
-                    } else {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                        switchTheme.isChecked = false
-                    }
+            viewModel!!.getThemeSettings().observe(viewLifecycleOwner, {
+                    isDarkModeActive: Boolean ->
+                if (isDarkModeActive) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    switchTheme.isChecked = true
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    switchTheme.isChecked = false
                 }
+            })
 
             switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 viewModel!!.saveThemeSetting(isChecked)

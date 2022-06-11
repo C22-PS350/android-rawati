@@ -30,14 +30,14 @@ class DashboardFragment : Fragment() {
         val pref = AccountPreferences.getInstance(requireContext().dataStore)
         viewModel = ViewModelProvider(this, ViewModelFactory(pref))[DashboardViewModel::class.java]
 
-        viewModel!!.getUser().observe(requireActivity()) {
+        viewModel!!.getUser().observe(viewLifecycleOwner) {
             viewModel!!.setDataUser(
                 it.token,
                 it.user_id) {
                 if (it?.userResult != null) {
-                    Toast.makeText(context, "DATA MASUK", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "DATA MASUK", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "DATA GAGAL MASUK", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "DATA GAGAL MASUK", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Rawati</string>
     <string name="group_name">C22-PS350</string>
     <string name="remember">Remember me</string>
@@ -87,4 +87,9 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="submit">Submit</string>
+    <string name="msg_input_data">Welcome to rawati mobile app, to use the app please input the data first.</string>
+    <string name="default_date" tools:ignore="TypographyDashes">2000-01-01</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="woman">Woman</string>
 </resources>

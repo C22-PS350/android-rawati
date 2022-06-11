@@ -17,8 +17,8 @@ import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.response.RegisterResponse
 import com.bangkit.rawati.databinding.ActivityRegisterBinding
 import com.bangkit.rawati.helper.ApiCallbackString
-import com.bangkit.rawati.ui.main.MainActivity
 import com.bangkit.rawati.ui.main.ViewModelFactory
+import com.bangkit.rawati.ui.profile.UpdateProfileActivity
 import com.bangkit.rawati.ui.signin.SignInActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
@@ -94,7 +94,7 @@ class RegisterActivity : AppCompatActivity() {
                 setTitle(getString(R.string.info))
                 setMessage(getString(R.string.login_success))
                 setPositiveButton(getString(R.string.next)) { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
+                    val intent = Intent(context, UpdateProfileActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                     finish()

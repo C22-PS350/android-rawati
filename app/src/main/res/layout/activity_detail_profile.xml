@@ -78,6 +78,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/line_horizontal">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -187,8 +191,71 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_email" />
 
+            <TextView
+                android:id="@+id/text_date_birth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Birth Date"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separate3" />
+
+            <TextView
+                android:id="@+id/txt_date_birth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_date_birth"
+                tools:text="your birth" />
+
+            <View
+                android:id="@+id/separate6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/greywhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_date_birth" />
+
+            <TextView
+                android:id="@+id/text_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separate6" />
+
+            <TextView
+                android:id="@+id/txt_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_gender"
+                tools:text="your gender" />
+
+            <View
+                android:id="@+id/separate7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/greywhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_gender" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.Guideline
