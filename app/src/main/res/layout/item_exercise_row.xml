@@ -12,7 +12,7 @@
         android:paddingTop="4dp">
 
         <TextView
-            android:id="@+id/txt_food1"
+            android:id="@+id/item_exercise_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="exercise"
@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txt_calorie1"
+            android:id="@+id/item_exercise_cals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-000 Cal"

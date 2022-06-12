@@ -14,11 +14,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.response.FoodRequest
 import com.bangkit.rawati.databinding.FragmentActivityBinding
 import com.bangkit.rawati.helper.ApiCallbackString
+import com.bangkit.rawati.ui.dashboard.ExerciseAdapter
+import com.bangkit.rawati.ui.dashboard.FoodAdapter
 import com.bangkit.rawati.ui.main.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
@@ -123,9 +126,12 @@ class ActivityFragment : Fragment() {
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.exerciseActivityData != null) {
                         val exerciseData = it?.exerciseActivityData
+                        // Apply to recycler view
+                        rvExerciseList.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = ExerciseAdapter(exerciseData)
+                        }
                         for (exercise in exerciseData) {
-                            // Apply to recycler view
-
                             // Count the calories
                             sumExerciseCal += exercise.calories
                         }
@@ -144,9 +150,12 @@ class ActivityFragment : Fragment() {
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.foodActivityData != null) {
                         val foodData = it?.foodActivityData
+                        // Apply to recycler view
+                        rvFoodList.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = FoodAdapter(foodData)
+                        }
                         for (food in foodData) {
-                            // Apply to recycler view
-
                             // Count the calories
                             sumFoodCal += food.calories
                         }

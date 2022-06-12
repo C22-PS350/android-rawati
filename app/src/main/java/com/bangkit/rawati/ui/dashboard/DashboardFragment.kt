@@ -11,6 +11,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.databinding.FragmentDashboardBinding
 import com.bangkit.rawati.ui.main.ViewModelFactory
@@ -111,9 +112,12 @@ class DashboardFragment : Fragment() {
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.exerciseActivityData != null) {
                         val exerciseData = it?.exerciseActivityData
+                        // Apply to recycler view
+                        rvExercise.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = ExerciseAdapter(exerciseData)
+                        }
                         for (exercise in exerciseData) {
-                            // Apply to recycler view
-
                             // Count the calories
                             sumExerciseCal += exercise.calories
                         }
@@ -130,9 +134,13 @@ class DashboardFragment : Fragment() {
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.foodActivityData != null) {
                         val foodData = it?.foodActivityData
-                        for (food in foodData) {
-                            // Apply to recycler view
+                        // Apply to recycler view
+                        rvFood.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = FoodAdapter(foodData)
+                        }
 
+                        for (food in foodData) {
                             // Count the calories
                             sumFoodCal += food.calories
                         }
