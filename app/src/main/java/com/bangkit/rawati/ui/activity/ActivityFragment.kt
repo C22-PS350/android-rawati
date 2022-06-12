@@ -25,6 +25,7 @@ import com.bangkit.rawati.ui.dashboard.FoodAdapter
 import com.bangkit.rawati.ui.main.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
+import java.lang.Integer.parseInt
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -116,31 +117,6 @@ class ActivityFragment : Fragment() {
      */
     private fun retrieveActivity() {
         binding.apply {
-
-            // Exercise
-            var sumExerciseCal = 0
-            viewModel!!.getUser().observe(requireActivity()) {
-                viewModel!!.getExerciseActivity(
-                    it.token,
-                    it.user_id,
-                    iso8601Date.format(viewModel!!.getDate())) {
-                    if (it?.exerciseActivityData != null) {
-                        val exerciseData = it?.exerciseActivityData
-                        // Apply to recycler view
-                        rvExerciseList.apply {
-                            layoutManager = LinearLayoutManager(activity)
-                            adapter = ExerciseAdapter(exerciseData)
-                        }
-                        for (exercise in exerciseData) {
-                            // Count the calories
-                            sumExerciseCal += exercise.calories
-                        }
-                        // Set the calories text
-                        exerciseCalories.text = "$sumExerciseCal Cal"
-                    }
-                }
-            }
-
             // Food
             var sumFoodCal = 0
             viewModel!!.getUser().observe(requireActivity()) {
@@ -161,12 +137,35 @@ class ActivityFragment : Fragment() {
                         }
                         // Set the calories text
                         foodCalories.text = "$sumFoodCal Cal"
+                        netCalories.text = "$sumFoodCal"
                     }
                 }
             }
-            var sumNetCal = sumFoodCal - sumExerciseCal
-
-            netCalories.text = "$sumNetCal Cal"
+            // Exercise
+            var sumExerciseCal = 0
+            viewModel!!.getUser().observe(requireActivity()) {
+                viewModel!!.getExerciseActivity(
+                    it.token,
+                    it.user_id,
+                    iso8601Date.format(viewModel!!.getDate())) {
+                    if (it?.exerciseActivityData != null) {
+                        val exerciseData = it?.exerciseActivityData
+                        // Apply to recycler view
+                        rvExerciseList.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = ExerciseAdapter(exerciseData)
+                        }
+                        for (exercise in exerciseData) {
+                            // Count the calories
+                            sumExerciseCal += exercise.calories
+                        }
+                        // Set the calories text
+                        exerciseCalories.text = "$sumExerciseCal Cal"
+                        var sumNetCal = parseInt(netCalories.text as String) - sumExerciseCal
+                        netCalories.text = "$sumNetCal Cal"
+                    }
+                }
+            }
         }
     }
 

@@ -102,8 +102,31 @@ class DashboardFragment : Fragment() {
      */
     private fun retrieveActivity() {
         binding.apply {
-            var sumExerciseCal = 0
+            // Food
+            var sumFoodCal = 0
+            viewModel!!.getUser().observe(requireActivity()) {
+                viewModel!!.getFoodActivity(
+                    it.token,
+                    it.user_id,
+                    iso8601Date.format(viewModel!!.getDate())) {
+                    if (it?.foodActivityData != null) {
+                        val foodData = it?.foodActivityData
+                        // Apply to recycler view
+                        rvFood.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = FoodAdapter(foodData)
+                        }
+                        for (food in foodData) {
+                            // Count the calories
+                            sumFoodCal += food.calories
+                        }
+                        // Set the calories text
+                        txtCalories.text = "$sumFoodCal"
+                    }
+                }
+            }
 
+            var sumExerciseCal = 0
             // Exercise
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getExerciseActivity(
@@ -121,34 +144,12 @@ class DashboardFragment : Fragment() {
                             // Count the calories
                             sumExerciseCal += exercise.calories
                         }
+                        // Set the calories text
+                        var sumNetCal = parseInt(txtCalories.text as String) - sumExerciseCal
+                        txtCalories.text = "$sumNetCal Cal"
                     }
                 }
             }
-
-            // Food
-            var sumFoodCal = 0
-            viewModel!!.getUser().observe(requireActivity()) {
-                viewModel!!.getFoodActivity(
-                    it.token,
-                    it.user_id,
-                    iso8601Date.format(viewModel!!.getDate())) {
-                    if (it?.foodActivityData != null) {
-                        val foodData = it?.foodActivityData
-                        // Apply to recycler view
-                        rvFood.apply {
-                            layoutManager = LinearLayoutManager(activity)
-                            adapter = FoodAdapter(foodData)
-                        }
-
-                        for (food in foodData) {
-                            // Count the calories
-                            sumFoodCal += food.calories
-                        }
-                    }
-                }
-            }
-            var netCal = sumFoodCal - sumExerciseCal
-            txtCalories.text = "$netCal Cal"
         }
     }
 }
