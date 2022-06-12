@@ -155,7 +155,8 @@ class ActivityFragment : Fragment() {
                     }
                 }
             }
-            var sumNetCal = sumFoodCal + sumExerciseCal
+            var sumNetCal = sumFoodCal - sumExerciseCal
+
             netCalories.text = "$sumNetCal Cal"
         }
     }

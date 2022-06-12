@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
+    // Auth Endpoints
     @Headers("Content-Type: application/json")
     @POST("auth/register")
     fun register(
@@ -23,6 +24,8 @@ interface ApiService {
         @Body resetPassword: ResetPassword
     ): Call<ResetPassword>
 
+
+    // User Endpoints
     @Headers("Content-Type: application/json")
     @PUT("users/{user_id}/update-password")
     fun changePassword(
@@ -37,6 +40,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("user_id") user_id: String
     ): Call<UserResponse>
+
 
     // Activity (Exercise) Endpoints
     @Headers("Content-Type: application/json")
@@ -83,6 +87,8 @@ interface ApiService {
         @Path("food_id") food_id: String
     ): Call<FoodActivityRequest>
 
+
+    // Profile Endpoints
     @Headers("Content-Type: application/json")
     @PUT("users/{user_id}/profile")
     fun updateProfile(
@@ -97,4 +103,20 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("user_id") user_id: String
     ): Call<UserProfileResponse>
+
+
+    // Recommendation Endpoints
+    @Headers("Content-Type: application/json")
+    @POST("recommendation/exercise")
+    fun getExerciseRecommendations(
+        @Header("Authorization") token: String,
+        @Body calories: Int
+    ): Call<ExerciseRecommendationResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("recommendation/food")
+    fun getFoodRecommendations(
+        @Header("Authorization") token: String,
+        @Body calories: Int
+    ): Call<FoodRecommendationResponse>
 }
