@@ -9,9 +9,6 @@ data class FoodRequest(
 
     @field:SerializedName("name")
     val name: String,
-
-    @field:SerializedName("data")
-    val registerResult: FoodResponse?
 )
 
 data class FoodResponse(

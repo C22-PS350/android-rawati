@@ -75,7 +75,7 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
     }
 
     // Activity (Exercise) Endpoint
-    fun setExerciseActivity(
+    fun getExerciseActivity(
         token: String, user_id: String, date: String,
         onResult: (AllExerciseActivityRequest?) -> Unit) {
         ApiConfig.apiInstance
@@ -99,11 +99,7 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
                 }
             })
     }
-    fun getExercises(): LiveData<AllExerciseActivityRequest>{
-        return exercises
-    }
-
-    fun setExerciseDetail(
+    fun getExerciseDetail(
         token: String, user_id: String, exercise_id: String,
         onResult: (ExerciseActivityRequest?) -> Unit) {
 
@@ -128,9 +124,6 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
                 }
             })
     }
-    fun getExercise(): LiveData<ExerciseActivityRequest>{
-        return exercise
-    }
 
     //TODO(Astrada): Change create exercise activity function
     fun createExerciseActivity() {
@@ -138,7 +131,7 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
     }
 
     // Activity (Food) Endpoint
-    fun setFoodActivity(
+    fun getFoodActivity(
         token: String, user_id: String, date: String,
         onResult: (AllFoodActivityRequest?) -> Unit) {
         ApiConfig.apiInstance
@@ -162,10 +155,6 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
                 }
             })
     }
-    fun getFoods(): LiveData<AllFoodActivityRequest>{
-        return foods
-    }
-
     fun getFoodDetail(
         token: String, user_id: String, food_id: String,
         onResult: (FoodActivityRequest?) -> Unit) {
@@ -189,9 +178,6 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
                     Log.d("Failure", t.message.toString())
                 }
             })
-    }
-    fun getFood(): LiveData<FoodActivityRequest>{
-        return food
     }
 
     fun createFoodActivity(
