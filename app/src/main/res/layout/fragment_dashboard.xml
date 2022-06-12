@@ -82,7 +82,7 @@
                     android:id="@+id/txt_calories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1061 Cal"
+                    android:text="0"
                     android:textColor="@color/orange"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"

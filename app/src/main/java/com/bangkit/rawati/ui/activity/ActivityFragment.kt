@@ -80,7 +80,7 @@ class ActivityFragment : Fragment() {
 
                 btnAdd.setOnClickListener {
                     val foodRequest = FoodRequest(
-                        calories = Integer.parseInt(foodCalories.text.toString()),
+                        calories = parseInt(foodCalories.text.toString()),
                         name = foodName.text.toString()
                     )
 
@@ -136,7 +136,7 @@ class ActivityFragment : Fragment() {
                             sumFoodCal += food.calories
                         }
                         // Set the calories text
-                        foodCalories.text = "$sumFoodCal Cal"
+                        foodCalories.text = "$sumFoodCal"
                         netCalories.text = "$sumFoodCal"
                     }
                 }
@@ -160,9 +160,9 @@ class ActivityFragment : Fragment() {
                             sumExerciseCal += exercise.calories
                         }
                         // Set the calories text
-                        exerciseCalories.text = "$sumExerciseCal Cal"
-                        var sumNetCal = parseInt(netCalories.text as String) - sumExerciseCal
-                        netCalories.text = "$sumNetCal Cal"
+                        exerciseCalories.text = "$sumExerciseCal"
+                        var sumNetCal = 0
+                        netCalories.text = "$sumNetCal"
                     }
                 }
             }

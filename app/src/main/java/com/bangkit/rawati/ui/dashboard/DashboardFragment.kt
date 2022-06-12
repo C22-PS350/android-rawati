@@ -2,6 +2,7 @@ package com.bangkit.rawati.ui.dashboard
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -146,7 +147,7 @@ class DashboardFragment : Fragment() {
                         }
                         // Set the calories text
                         var sumNetCal = parseInt(txtCalories.text as String) - sumExerciseCal
-                        txtCalories.text = "$sumNetCal Cal"
+                        txtCalories.text = "$sumNetCal"
                     }
                 }
             }

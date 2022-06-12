@@ -8,6 +8,7 @@ import com.bangkit.rawati.ui.dashboard.DashboardViewModel
 import com.bangkit.rawati.ui.profile.DetailProfileViewModel
 import com.bangkit.rawati.ui.profile.ProfileViewModel
 import com.bangkit.rawati.ui.profile.UpdateProfileViewModel
+import com.bangkit.rawati.ui.recommendation.RecommendationViewModel
 import com.bangkit.rawati.ui.register.RegisterViewModel
 import com.bangkit.rawati.ui.signin.SignInViewModel
 
@@ -38,6 +39,9 @@ class ViewModelFactory (private val pref: AccountPreferences) : ViewModelProvide
             }
             modelClass.isAssignableFrom(UpdateProfileViewModel::class.java) -> {
                 UpdateProfileViewModel(pref) as T
+            }
+            modelClass.isAssignableFrom(RecommendationViewModel::class.java) -> {
+                RecommendationViewModel(pref) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

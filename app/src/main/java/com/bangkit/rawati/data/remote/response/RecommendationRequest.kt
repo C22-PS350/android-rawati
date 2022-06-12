@@ -2,10 +2,15 @@ package com.bangkit.rawati.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-// GET Exercise Recommendations
+data class RecommendationRequest(
+    @field:SerializedName("calories")
+    val calories: Int
+)
+
+// POST Exercise Recommendations
 data class ExerciseRecommendationResponse(
     @field:SerializedName("data")
-    val exerciseReccomendation: List<ExerciseRecommendationData>?
+    val exerciseRecommendation: List<ExerciseRecommendationData>?
 )
 
 data class ExerciseRecommendationData(
@@ -19,10 +24,10 @@ data class ExerciseRecommendationData(
     val calories: Int,
 )
 
-// GET Food Recommendations
+// POST Food Recommendations
 data class FoodRecommendationResponse(
     @field:SerializedName("data")
-    val foodReccomendation: List<FoodRecommendationData>?
+    val foodRecommendation: List<FoodRecommendationData>?
 )
 
 data class FoodRecommendationData(

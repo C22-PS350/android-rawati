@@ -35,6 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/text_recommend">
 
             <LinearLayout
+                android:id="@+id/ll_exercise"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -43,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/activity"
+                    android:text="@string/exercise"
                     android:textColor="@color/white"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -62,6 +63,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
             <LinearLayout
+                android:id="@+id/ll_food"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

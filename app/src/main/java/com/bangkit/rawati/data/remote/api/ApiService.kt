@@ -2,6 +2,7 @@ package com.bangkit.rawati.data.remote.api
 
 import com.bangkit.rawati.data.remote.response.*
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -110,13 +111,13 @@ interface ApiService {
     @POST("recommendation/exercise")
     fun getExerciseRecommendations(
         @Header("Authorization") token: String,
-        @Body calories: Int
+        @Body recommendationRequest: RecommendationRequest
     ): Call<ExerciseRecommendationResponse>
 
     @Headers("Content-Type: application/json")
     @POST("recommendation/food")
     fun getFoodRecommendations(
         @Header("Authorization") token: String,
-        @Body calories: Int
+        @Body recommendationRequest: RecommendationRequest
     ): Call<FoodRecommendationResponse>
 }

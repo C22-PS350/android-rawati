@@ -37,12 +37,12 @@
     <string name="calories">Calories</string>
     <string name="date">Today</string>
     <string name="exercise">Exercise</string>
-    <string name="exercise_calories">0 Cal</string>
+    <string name="exercise_calories">0</string>
     <string name="equal">=</string>
     <string name="food">Food</string>
-    <string name="food_calories">2500 Cal</string>
+    <string name="food_calories">2500</string>
     <string name="minus">-</string>
-    <string name="net_calories">2500 Cal</string>
+    <string name="net_calories">2500</string>
     <string name="next_day">Next Day</string>
     <string name="prev_day">Previous Day</string>
 
@@ -57,8 +57,8 @@
     <string name="here_s_your_daily_track">Here\'s your daily track</string>
     <string name="wanna_get_recommendation">Wanna get recommendation?</string>
     <string name="your_daily_calories_need">Your daily calories need</string>
-    <string name="_0_cal">0 Cal</string>
-    <string name="_2500_cal">2500 Cal</string>
+    <string name="_0_cal">0</string>
+    <string name="_2500_cal">2500</string>
     <string name="foods_you_ate_today">Foods you ate today</string>
     <string name="exercises_you_did_today">Exercises you did today</string>
     <string name="target_bmi">Target BMI</string>
