@@ -6,15 +6,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
+import com.bangkit.rawati.data.remote.response.FoodRequest
 import com.bangkit.rawati.databinding.FragmentActivityBinding
 import com.bangkit.rawati.helper.ApiCallbackString
 import com.bangkit.rawati.ui.main.ViewModelFactory
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -61,7 +68,38 @@ class ActivityFragment : Fragment() {
 
             // Add button
             btnAddFood.setOnClickListener {
+                val dialog = BottomSheetDialog(requireContext())
+                val view = layoutInflater.inflate(R.layout.popup_form_food, null)
+                val btnAdd = view.findViewById<Button>(R.id.form_food_add)
+                val foodName = view.findViewById<TextInputEditText>(R.id.txt_food_name)
+                val foodCalories = view.findViewById<TextInputEditText>(R.id.txt_food_calories)
 
+                btnAdd.setOnClickListener {
+                    val foodRequest = FoodRequest(
+                        calories = Integer.parseInt(foodCalories.text.toString()),
+                        name = foodName.text.toString()
+                    )
+
+                    viewModel!!.getUser().observe(requireActivity()) {
+                        viewModel!!.createFoodActivity(
+                            it.token,
+                            it.user_id,
+                            foodRequest,
+                            object : ApiCallbackString {
+                                override fun onResponse(state: Boolean, message: String) {
+                                    processChange(state, message)
+                                }
+                            }) {
+                            it?.name
+                            it?.calories
+                        }
+                    }
+                    dialog.dismiss()
+                    // Get new activity
+                    retrieveActivity()
+                }
+                dialog.setContentView(view)
+                dialog.show()
             }
             btnAddExercise.setOnClickListener {
 
@@ -79,7 +117,7 @@ class ActivityFragment : Fragment() {
             // Exercise
             var sumExerciseCal = 0
             viewModel!!.getUser().observe(requireActivity()) {
-                viewModel!!.setExerciseActivity(
+                viewModel!!.getExerciseActivity(
                     it.token,
                     it.user_id,
                     iso8601Date.format(viewModel!!.getDate())) {
@@ -100,7 +138,7 @@ class ActivityFragment : Fragment() {
             // Food
             var sumFoodCal = 0
             viewModel!!.getUser().observe(requireActivity()) {
-                viewModel!!.setFoodActivity(
+                viewModel!!.getFoodActivity(
                     it.token,
                     it.user_id,
                     iso8601Date.format(viewModel!!.getDate())) {
@@ -129,11 +167,57 @@ class ActivityFragment : Fragment() {
         binding.apply {
             if (iso8601Date.format(viewModel!!.getDate()) == iso8601Date.format(viewModel!!.todayDate())) {
                 btnDate.text = "Today"
+                btnNext.visibility = View.INVISIBLE
             } else if (iso8601Date.format(viewModel!!.getDate()) == iso8601Date.format(viewModel!!.yesterdayDate())) {
                 btnDate.text = "Yesterday"
+                btnNext.visibility = View.VISIBLE
             } else {
                 btnDate.text = activityDate.format(viewModel!!.getDate())
+                btnNext.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun processChange(state: Boolean, message: String) {
+        if (state) {
+            // Show succes dialog
+            val dialog = BottomSheetDialog(requireContext())
+            val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
+            val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
+            val imgicon = view.findViewById<ImageView>(R.id.img_icon)
+            val textinfo = view.findViewById<TextView>(R.id.txt_info)
+            val textmessage = view.findViewById<TextView>(R.id.txt_message)
+
+            imgicon.setImageResource(R.drawable.ic_check)
+            textinfo.text = "Food added to activities"
+            textmessage.text = ""
+            closebtn.text = "OK"
+
+            closebtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+        } else {
+            val dialog = BottomSheetDialog(requireContext())
+            val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
+            val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
+            val imgicon = view.findViewById<ImageView>(R.id.img_icon)
+            val textinfo = view.findViewById<TextView>(R.id.txt_info)
+            val textmessage = view.findViewById<TextView>(R.id.txt_message)
+
+            imgicon.setImageResource(R.drawable.ic_error)
+            textinfo.text = "Ooops Sorry..."
+            textmessage.text = "There is an error while adding food to activities"
+            closebtn.text = "OK"
+
+            closebtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
         }
     }
 }
