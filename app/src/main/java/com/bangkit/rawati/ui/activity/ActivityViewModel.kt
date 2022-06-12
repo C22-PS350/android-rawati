@@ -125,9 +125,33 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
             })
     }
 
-    //TODO(Astrada): Change create exercise activity function
-    fun createExerciseActivity() {
+    fun createExerciseActivity(
+        token: String, user_id: String, exerciseRequest: ExerciseRequest,
+        param: ApiCallbackString, onResult: (ExerciseRequest?) -> Unit) {
+        ApiConfig.apiInstance
+            .createExerciseActivity("Bearer $token", user_id, exerciseRequest)
+            .enqueue(object : Callback<ExerciseRequest> {
+                override fun onResponse(
+                    call: Call<ExerciseRequest>,
+                    response: Response<ExerciseRequest>
+                ) {
+                    val responseBody = response.body()
+                    onResult(responseBody)
+                    if (responseBody != null) {
+                        param.onResponse(true, SUCCESS)
+                    } else {
+                        Log.e(TAG, "onFailure: ${response.code()}")
+                        val jsonObject =
+                            JSONTokener(response.errorBody()!!.string()).nextValue() as JSONObject
+                        val message = jsonObject.getString("error")
+                        param.onResponse(false, message)
+                    }
+                }
 
+                override fun onFailure(call: Call<ExerciseRequest>, t: Throwable) {
+                    onResult(null)
+                }
+            })
     }
 
     // Activity (Food) Endpoint
@@ -193,7 +217,7 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
                     val responseBody = response.body()
                     onResult(responseBody)
                     if (responseBody != null) {
-                        param.onResponse(responseBody != null, SUCCESS)
+                        param.onResponse(true, SUCCESS)
                     } else {
                         Log.e(TAG, "onFailure: ${response.code()}")
                         val jsonObject =

@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
+import com.bangkit.rawati.data.remote.response.ExerciseRequest
 import com.bangkit.rawati.data.remote.response.FoodRequest
 import com.bangkit.rawati.databinding.FragmentActivityBinding
 import com.bangkit.rawati.helper.ApiCallbackString
@@ -25,9 +26,13 @@ import com.bangkit.rawati.ui.dashboard.FoodAdapter
 import com.bangkit.rawati.ui.main.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.delay
+import java.lang.Float.parseFloat
 import java.lang.Integer.parseInt
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.concurrent.schedule
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 class ActivityFragment : Fragment() {
@@ -106,7 +111,43 @@ class ActivityFragment : Fragment() {
                 dialog.show()
             }
             btnAddExercise.setOnClickListener {
+                val dialog = BottomSheetDialog(requireContext())
+                val view = layoutInflater.inflate(R.layout.popup_form_exercise, null)
+                val btnAdd = view.findViewById<Button>(R.id.form_exercise_add)
+                val exerciseName = view.findViewById<TextInputEditText>(R.id.txt_exercise_name)
+                val exerciseDuration = view.findViewById<TextInputEditText>(R.id.txt_exercise_duration)
+                val exerciseHeartRate = view.findViewById<TextInputEditText>(R.id.txt_exercise_heart_rate)
+                val exerciseTemp = view.findViewById<TextInputEditText>(R.id.txt_exercise_temp)
 
+                btnAdd.setOnClickListener {
+                    val exerciseRequest = ExerciseRequest(
+                        name = exerciseName.text.toString(),
+                        duration = parseInt(exerciseDuration.text.toString()),
+                        heart_rate = parseInt(exerciseHeartRate.text.toString()),
+                        body_temp = parseFloat(exerciseTemp.text.toString()),
+                    )
+
+                    viewModel!!.getUser().observe(requireActivity()) {
+                        viewModel!!.createExerciseActivity(
+                            it.token,
+                            it.user_id,
+                            exerciseRequest,
+                            object : ApiCallbackString {
+                                override fun onResponse(state: Boolean, message: String) {
+                                    processChange(state, message)
+                                }
+                            }) {
+                            it?.name
+                            it?.heart_rate
+                            it?.duration
+                            it?.body_temp
+                        }
+                    }
+                    dialog.dismiss()
+                    retrieveActivity()
+                }
+                dialog.setContentView(view)
+                dialog.show()
             }
         }
         return binding.root
@@ -116,15 +157,16 @@ class ActivityFragment : Fragment() {
      * Retrieve activity data
      */
     private fun retrieveActivity() {
+        Log.d("Activity", "Calling retrieve activity")
         binding.apply {
             // Food
-            var sumFoodCal = 0
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getFoodActivity(
                     it.token,
                     it.user_id,
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.foodActivityData != null) {
+                        var sumFoodCal = 0.0F
                         val foodData = it?.foodActivityData
                         // Apply to recycler view
                         rvFoodList.apply {
@@ -136,19 +178,19 @@ class ActivityFragment : Fragment() {
                             sumFoodCal += food.calories
                         }
                         // Set the calories text
-                        foodCalories.text = "$sumFoodCal"
-                        netCalories.text = "$sumFoodCal"
+                        foodCalories.text = String.format("%.2f", sumFoodCal)
+                        netCalories.text = String.format("%.2f", sumFoodCal)
                     }
                 }
             }
             // Exercise
-            var sumExerciseCal = 0
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getExerciseActivity(
                     it.token,
                     it.user_id,
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.exerciseActivityData != null) {
+                        var sumExerciseCal = 0.0F
                         val exerciseData = it?.exerciseActivityData
                         // Apply to recycler view
                         rvExerciseList.apply {
@@ -160,9 +202,9 @@ class ActivityFragment : Fragment() {
                             sumExerciseCal += exercise.calories
                         }
                         // Set the calories text
-                        exerciseCalories.text = "$sumExerciseCal"
-                        var sumNetCal = 0
-                        netCalories.text = "$sumNetCal"
+                        exerciseCalories.text = String.format("%.2f", sumExerciseCal)
+                        var sumNetCal = parseFloat(netCalories.text as String) - sumExerciseCal
+                        netCalories.text = String.format("%.2f", sumNetCal)
                     }
                 }
             }
@@ -189,7 +231,7 @@ class ActivityFragment : Fragment() {
 
     private fun processChange(state: Boolean, message: String) {
         if (state) {
-            // Show succes dialog
+            // Show success dialog
             val dialog = BottomSheetDialog(requireContext())
             val view = layoutInflater.inflate(R.layout.popup_info_reset, null)
             val closebtn = view.findViewById<Button>(R.id.btn_resetsuccess)
@@ -198,12 +240,13 @@ class ActivityFragment : Fragment() {
             val textmessage = view.findViewById<TextView>(R.id.txt_message)
 
             imgicon.setImageResource(R.drawable.ic_check)
-            textinfo.text = "Food added to activities"
+            textinfo.text = "Successfully added to activities"
             textmessage.text = ""
             closebtn.text = "OK"
 
             closebtn.setOnClickListener {
                 dialog.dismiss()
+                retrieveActivity()
             }
             dialog.setCancelable(false)
             dialog.setContentView(view)

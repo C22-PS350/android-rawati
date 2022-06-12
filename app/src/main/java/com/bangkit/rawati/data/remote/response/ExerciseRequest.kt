@@ -3,16 +3,18 @@ package com.bangkit.rawati.data.remote.response
 import com.google.gson.annotations.SerializedName
 
 // For POST Exercise to Endpoint
-//TODO(Astrada): Change data with exercise endpoint
 data class ExerciseRequest(
-    @field:SerializedName("calories")
-    val calories: Int,
+    @field:SerializedName("body_temp")
+    val body_temp: Float,
+
+    @field:SerializedName("duration")
+    val duration: Int,
+
+    @field:SerializedName("heart_rate")
+    val heart_rate: Int,
 
     @field:SerializedName("name")
     val name: String,
-
-    @field:SerializedName("data")
-    val registerResult: ExerciseResponse?
 )
 
 data class ExerciseResponse(
@@ -37,7 +39,7 @@ data class ExerciseActivityRequest(
 
 data class ExerciseActivityData(
     @field:SerializedName("calories")
-    val calories: Int,
+    val calories: Float,
 
     @field:SerializedName("duration")
     val duration: Int,

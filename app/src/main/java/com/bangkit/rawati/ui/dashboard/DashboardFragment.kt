@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.databinding.FragmentDashboardBinding
 import com.bangkit.rawati.ui.main.ViewModelFactory
+import java.lang.Float.parseFloat
 import java.lang.Integer.parseInt
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -104,7 +105,7 @@ class DashboardFragment : Fragment() {
     private fun retrieveActivity() {
         binding.apply {
             // Food
-            var sumFoodCal = 0
+            var sumFoodCal = 0.0
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getFoodActivity(
                     it.token,
@@ -127,7 +128,7 @@ class DashboardFragment : Fragment() {
                 }
             }
 
-            var sumExerciseCal = 0
+            var sumExerciseCal = 0.0
             // Exercise
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getExerciseActivity(
@@ -146,8 +147,8 @@ class DashboardFragment : Fragment() {
                             sumExerciseCal += exercise.calories
                         }
                         // Set the calories text
-                        var sumNetCal = parseInt(txtCalories.text as String) - sumExerciseCal
-                        txtCalories.text = "$sumNetCal"
+                        var sumNetCal = parseFloat(txtCalories.text as String) - sumExerciseCal
+                        txtCalories.text = String.format("%.2f", sumNetCal)
                     }
                 }
             }

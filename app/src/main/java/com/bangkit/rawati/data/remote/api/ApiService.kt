@@ -52,7 +52,13 @@ interface ApiService {
         @Query("date") date: String
     ): Call<AllExerciseActivityRequest>
 
-    //TODO(Astrada): Add POST Exercise
+    @Headers("Content-Type: application/json")
+    @POST("users/{user_id}/exercises")
+    fun createExerciseActivity(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_id: String,
+        @Body foodRequest: ExerciseRequest
+    ): Call<ExerciseRequest>
 
     @Headers("Content-Type: application/json")
     @GET("users/{user_id}/exercises/{exercise_id}")
