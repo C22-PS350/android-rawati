@@ -20,7 +20,7 @@ For full documentation on how to install the technologies above and set up your 
 
 ## Running the App
 ### Run app through apk file
-1 Download the Android Package File (.apk) [here]().
+1 Download the Android Package File (.apk) [here](https://drive.google.com/file/d/1Sl25u5oZn09sHjSbu0hrNxOQGMXSFoHZ/view?usp=sharing).
 
 2 Install the APK file on device. When the installation completes, you can view the app in your apps list.
 
