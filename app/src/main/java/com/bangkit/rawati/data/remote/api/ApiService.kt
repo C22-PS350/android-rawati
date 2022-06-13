@@ -126,4 +126,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body recommendationRequest: RecommendationRequest
     ): Call<FoodRecommendationResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("users/{user_id}/total-calories")
+    fun getCalories(
+        @Header("Authorization") token: String,
+        @Path("user_id") user_id: String,
+        @Query("date") date: String
+    ): Call<CaloriesResponse>
 }

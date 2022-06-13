@@ -8,10 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -50,6 +47,16 @@ class ProfileFragment : Fragment() {
             /*llNotification.setOnClickListener {
                 startActivity(Intent(requireActivity(), UpdateProfileActivity::class.java))
             }*/
+
+            viewModel!!.getUser().observe(viewLifecycleOwner) {
+                viewModel!!.getDataUser(
+                    it.token,
+                    it.user_id) {
+                    if (it?.userResult != null) {
+                        txtName.text = it?.userResult.name
+                    }
+                }
+            }
 
             llSignout.setOnClickListener {
                 val dialog = Dialog(requireActivity())

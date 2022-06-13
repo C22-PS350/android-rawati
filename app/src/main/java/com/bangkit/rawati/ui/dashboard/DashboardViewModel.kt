@@ -8,10 +8,7 @@ import androidx.lifecycle.asLiveData
 import com.bangkit.rawati.data.local.datastore.Account
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.api.ApiConfig
-import com.bangkit.rawati.data.remote.response.AllExerciseActivityRequest
-import com.bangkit.rawati.data.remote.response.AllFoodActivityRequest
-import com.bangkit.rawati.data.remote.response.UserProfileResponse
-import com.bangkit.rawati.data.remote.response.UserResponse
+import com.bangkit.rawati.data.remote.response.*
 import com.bangkit.rawati.ui.activity.ActivityViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +20,7 @@ class DashboardViewModel(private val pref: AccountPreferences) : ViewModel() {
     val foods = MutableLiveData<AllFoodActivityRequest>()
     val exercises = MutableLiveData<AllExerciseActivityRequest>()
     val profile = MutableLiveData<UserProfileResponse>()
+    val calories = MutableLiveData<CaloriesResponse>()
 
     /**
      * Get today's date
@@ -136,6 +134,31 @@ class DashboardViewModel(private val pref: AccountPreferences) : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<AllFoodActivityRequest>, t: Throwable) {
+                    Log.d("Failure", t.message.toString())
+                }
+            })
+    }
+
+    fun getCalories(
+        token: String, user_id: String, date: String,
+        onResult: (CaloriesResponse?) -> Unit) {
+        ApiConfig.apiInstance
+            .getCalories("Bearer $token", user_id, date)
+            .enqueue(object : Callback<CaloriesResponse> {
+                override fun onResponse(
+                    call: Call<CaloriesResponse>,
+                    response: Response<CaloriesResponse>
+                ) {
+                    val responseBody = response.body()
+                    onResult(responseBody)
+                    if (responseBody != null) {
+                        calories.postValue(response.body())
+                    } else {
+                        Log.e(TAG, "onFailure: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<CaloriesResponse>, t: Throwable) {
                     Log.d("Failure", t.message.toString())
                 }
             })

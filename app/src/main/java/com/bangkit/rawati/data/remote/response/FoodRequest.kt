@@ -33,7 +33,7 @@ data class FoodActivityRequest(
 
 data class FoodActivityData(
     @field:SerializedName("calories")
-    val calories: Int,
+    val calories: Float,
 
     @field:SerializedName("food_activity_id")
     val food_activity_id: Int,

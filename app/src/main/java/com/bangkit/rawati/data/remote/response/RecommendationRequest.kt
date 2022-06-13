@@ -21,7 +21,7 @@ data class ExerciseRecommendationData(
     val name: String,
 
     @field:SerializedName("calories")
-    val calories: Int,
+    val calories: Float,
 )
 
 // POST Food Recommendations
@@ -38,5 +38,5 @@ data class FoodRecommendationData(
     val name: String,
 
     @field:SerializedName("calories")
-    val calories: Int,
+    val calories: Float,
 )

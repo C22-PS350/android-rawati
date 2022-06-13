@@ -10,6 +10,7 @@ import com.bangkit.rawati.data.local.datastore.AccountPreferences
 import com.bangkit.rawati.data.remote.api.ApiConfig
 import com.bangkit.rawati.data.remote.response.*
 import com.bangkit.rawati.helper.ApiCallbackString
+import com.bangkit.rawati.ui.dashboard.DashboardViewModel
 import org.json.JSONObject
 import org.json.JSONTokener
 import retrofit2.Call
@@ -28,6 +29,7 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
     val exercises = MutableLiveData<AllExerciseActivityRequest>()
     val food = MutableLiveData<FoodActivityRequest>()
     val exercise = MutableLiveData<ExerciseActivityRequest>()
+    val calories = MutableLiveData<CaloriesResponse>()
     private val iso8601Date: DateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     fun getDate(): Date {
@@ -229,6 +231,31 @@ class ActivityViewModel (private val pref: AccountPreferences): ViewModel(){
 
                 override fun onFailure(call: Call<FoodRequest>, t: Throwable) {
                     onResult(null)
+                }
+            })
+    }
+
+    fun getCalories(
+        token: String, user_id: String, date: String,
+        onResult: (CaloriesResponse?) -> Unit) {
+        ApiConfig.apiInstance
+            .getCalories("Bearer $token", user_id, date)
+            .enqueue(object : Callback<CaloriesResponse> {
+                override fun onResponse(
+                    call: Call<CaloriesResponse>,
+                    response: Response<CaloriesResponse>
+                ) {
+                    val responseBody = response.body()
+                    onResult(responseBody)
+                    if (responseBody != null) {
+                        calories.postValue(response.body())
+                    } else {
+                        Log.e(DashboardViewModel.TAG, "onFailure: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<CaloriesResponse>, t: Throwable) {
+                    Log.d("Failure", t.message.toString())
                 }
             })
     }

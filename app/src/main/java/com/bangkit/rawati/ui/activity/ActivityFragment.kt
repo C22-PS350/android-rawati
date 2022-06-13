@@ -166,20 +166,12 @@ class ActivityFragment : Fragment() {
                     it.user_id,
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.foodActivityData != null) {
-                        var sumFoodCal = 0.0F
                         val foodData = it?.foodActivityData
                         // Apply to recycler view
                         rvFoodList.apply {
                             layoutManager = LinearLayoutManager(activity)
                             adapter = FoodAdapter(foodData)
                         }
-                        for (food in foodData) {
-                            // Count the calories
-                            sumFoodCal += food.calories
-                        }
-                        // Set the calories text
-                        foodCalories.text = String.format("%.2f", sumFoodCal)
-                        netCalories.text = String.format("%.2f", sumFoodCal)
                     }
                 }
             }
@@ -190,20 +182,32 @@ class ActivityFragment : Fragment() {
                     it.user_id,
                     iso8601Date.format(viewModel!!.getDate())) {
                     if (it?.exerciseActivityData != null) {
-                        var sumExerciseCal = 0.0F
                         val exerciseData = it?.exerciseActivityData
                         // Apply to recycler view
                         rvExerciseList.apply {
                             layoutManager = LinearLayoutManager(activity)
                             adapter = ExerciseAdapter(exerciseData)
                         }
-                        for (exercise in exerciseData) {
-                            // Count the calories
-                            sumExerciseCal += exercise.calories
-                        }
-                        // Set the calories text
-                        exerciseCalories.text = String.format("%.2f", sumExerciseCal)
-                        var sumNetCal = parseFloat(netCalories.text as String) - sumExerciseCal
+                    }
+                }
+            }
+        }
+        retrieveCalories()
+    }
+
+    private fun retrieveCalories() {
+        viewModel!!.getUser().observe(requireActivity()) {
+            viewModel!!.getCalories(
+                it.token,
+                it.user_id,
+                iso8601Date.format(viewModel!!.getDate())
+            ) {
+                if (it?.caloriesData != null) {
+                    val data = it?.caloriesData
+                    var sumNetCal = data.food - data.exercise
+                    binding.apply {
+                        foodCalories.text = String.format("%.2f", data.food)
+                        exerciseCalories.text = String.format("%.2f", data.exercise)
                         netCalories.text = String.format("%.2f", sumNetCal)
                     }
                 }

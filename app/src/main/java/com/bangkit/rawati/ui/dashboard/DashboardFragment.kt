@@ -53,6 +53,7 @@ class DashboardFragment : Fragment() {
         retrieveActivity()
         retrieveName()
         retrieveProfile()
+        retrieveCalories()
         // retrieveRecommendation()
 
         return binding.root
@@ -71,6 +72,24 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun retrieveCalories() {
+        viewModel!!.getUser().observe(requireActivity()) {
+            viewModel!!.getCalories(
+                it.token,
+                it.user_id,
+                iso8601Date.format(viewModel!!.getDate())
+            ) {
+                if (it?.caloriesData != null) {
+                    val data = it?.caloriesData
+                    var sumNetCal = data.food - data.exercise
+                    binding.apply {
+                        txtCalories.text = String.format("%.2f", sumNetCal)
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Retrieve profile data
      */
@@ -83,16 +102,32 @@ class DashboardFragment : Fragment() {
                     val profileData = it?.userProfileResult
                     var currWeight = if (parseInt(profileData.weight) != 0) "${profileData.weight} Kg" else "-"
                     var goalWeight = if (parseInt(profileData.weight_goal) != 0) "${profileData.weight_goal} Kg" else "-"
-                    var height = parseInt(profileData.height)
+                    var height = parseFloat(profileData.height) / 100.0F
                     var gender = profileData.gender
                     var age = profileData.birth_date
 
+                    var currBMI = "-"
+                    var goalBMI = "-"
+                    if (parseInt(profileData.height) != 0) {
+                        if (currWeight != "-") {
+                            Log.d("a", height.toString())
+                            var currBMIVal = 0.0F
+                            currBMIVal = parseFloat(profileData.weight) / (height * height)
+                            currBMI = String.format("%.2f", currBMIVal)
+                        }
+                        if (goalWeight != "-") {
+                            var goalBMIVal = 0.0F
+                            goalBMIVal = parseFloat(profileData.weight_goal) / (height * height)
+                            goalBMI = String.format("%.2f", goalBMIVal)
+                        }
+                    }
+
                     binding.apply {
                         txtWeight.text = goalWeight
-                        txtBmi.text = "-"
+                        txtBmi.text = goalBMI
 
                         txtCurrent.text = currWeight
-                        txtCurrentBmi.text = "-"
+                        txtCurrentBmi.text = currBMI
                     }
                 }
             }
@@ -105,7 +140,6 @@ class DashboardFragment : Fragment() {
     private fun retrieveActivity() {
         binding.apply {
             // Food
-            var sumFoodCal = 0.0
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getFoodActivity(
                     it.token,
@@ -118,17 +152,10 @@ class DashboardFragment : Fragment() {
                             layoutManager = LinearLayoutManager(activity)
                             adapter = FoodAdapter(foodData)
                         }
-                        for (food in foodData) {
-                            // Count the calories
-                            sumFoodCal += food.calories
-                        }
-                        // Set the calories text
-                        txtCalories.text = "$sumFoodCal"
                     }
                 }
             }
 
-            var sumExerciseCal = 0.0
             // Exercise
             viewModel!!.getUser().observe(requireActivity()) {
                 viewModel!!.getExerciseActivity(
@@ -142,13 +169,6 @@ class DashboardFragment : Fragment() {
                             layoutManager = LinearLayoutManager(activity)
                             adapter = ExerciseAdapter(exerciseData)
                         }
-                        for (exercise in exerciseData) {
-                            // Count the calories
-                            sumExerciseCal += exercise.calories
-                        }
-                        // Set the calories text
-                        var sumNetCal = parseFloat(txtCalories.text as String) - sumExerciseCal
-                        txtCalories.text = String.format("%.2f", sumNetCal)
                     }
                 }
             }

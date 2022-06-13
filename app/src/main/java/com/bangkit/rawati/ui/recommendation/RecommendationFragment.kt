@@ -2,6 +2,7 @@ package com.bangkit.rawati.ui.recommendation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.rawati.R
 import com.bangkit.rawati.data.local.datastore.AccountPreferences
+import com.bangkit.rawati.data.remote.response.ExerciseRecommendationData
+import com.bangkit.rawati.data.remote.response.FoodRecommendationData
 import com.bangkit.rawati.data.remote.response.RecommendationRequest
 import com.bangkit.rawati.databinding.FragmentRecommendationBinding
 import com.bangkit.rawati.ui.main.ViewModelFactory
@@ -63,9 +68,7 @@ class RecommendationFragment : Fragment() {
                             } else {
                                 // Recommendations handling
                                 val foodList = it.foodRecommendation
-                                if (foodList != null) {
-                                    // TODO(Astrada): Save to shared preferences
-                                }
+                                showListFood(foodList)
                             }
                         }
                     }
@@ -100,9 +103,7 @@ class RecommendationFragment : Fragment() {
                             } else {
                                 // Recommendations handling
                                 val exerciseList = it.exerciseRecommendation
-                                if (exerciseList != null) {
-                                    // TODO(Astrada): Save to shared preferences
-                                }
+                                showListExercise(exerciseList)
                             }
                         }
                     }
@@ -113,6 +114,52 @@ class RecommendationFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    private fun showListFood(foodList: List<FoodRecommendationData>?) {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.popup_text, null)
+        val okbtn = view.findViewById<Button>(R.id.popup_ok)
+        val title = view.findViewById<TextView>(R.id.popup_title)
+        val description = view.findViewById<TextView>(R.id.popup_description)
+        val rv = view.findViewById<RecyclerView>(R.id.rv_recommendation)
+
+        title.text = "Food Recommendations"
+        description.text = "Here are your food recommendations"
+        rv.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = FoodRecommendAdapter(foodList)
+        }
+
+        okbtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showListExercise(exerciseList: List<ExerciseRecommendationData>?) {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.popup_text, null)
+        val okbtn = view.findViewById<Button>(R.id.popup_ok)
+        val title = view.findViewById<TextView>(R.id.popup_title)
+        val description = view.findViewById<TextView>(R.id.popup_description)
+        val rv = view.findViewById<RecyclerView>(R.id.rv_recommendation)
+
+        title.text = "Exercise Recommendations"
+        description.text = "Here are your exercise recommendations"
+        rv.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = ExerciseRecommendAdapter(exerciseList)
+        }
+
+        okbtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun showError() {
